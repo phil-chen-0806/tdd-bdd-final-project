@@ -27,9 +27,11 @@ import os
 import logging
 import unittest
 from decimal import Decimal
+#import boolean
 from service.models import Product, Category, db
 from service import app
 from tests.factories import ProductFactory
+from service.models import DataValidationError
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -118,6 +120,12 @@ class TestProductModel(unittest.TestCase):
 
     def test_update_a_product(self):
         """Update a Product"""
+        # update with a null id
+        product = ProductFactory()
+        product.id = None
+        #if not self.id:
+        self.assertRaises(DataValidationError, product.update)
+        # update with a not null id
         product = ProductFactory()
         product.id = None
         product.create()
@@ -246,3 +254,20 @@ class TestProductModel(unittest.TestCase):
         # to ensure that all the retrieved products have the correct category.
         for product in found:
             self.assertEqual(product.category, category)
+        
+    def test_find_by_price(self):
+        """Find Products by Price when not found"""
+        # not pass yet
+        found_products = Product.find_by_price(0)
+        #self.assertNotEqual(found_products[0].price, product.price)
+        #self.assertEqual(boolean(found_products), False)
+        found_products = []
+        self.assertEqual(len(found_products), 1)
+        """Find Products by Price with a normal price"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        # Assert that it was assigned an id and shows up in the database
+        self.assertIsNotNone(product.id)
+        found_products = Product.find_by_price(product.price)
+        self.assertEqual(found_products[0].price, product.price)
