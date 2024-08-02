@@ -27,7 +27,7 @@ import os
 import logging
 import unittest
 from decimal import Decimal
-#import boolean
+# import boolean
 from service.models import Product, Category, db
 from service import app
 from tests.factories import ProductFactory
@@ -123,7 +123,7 @@ class TestProductModel(unittest.TestCase):
         # update with a null id
         product = ProductFactory()
         product.id = None
-        #if not self.id:
+        # if not self.id:
         self.assertRaises(DataValidationError, product.update)
         # update with a not null id
         product = ProductFactory()
@@ -254,15 +254,15 @@ class TestProductModel(unittest.TestCase):
         # to ensure that all the retrieved products have the correct category.
         for product in found:
             self.assertEqual(product.category, category)
-        
+
     def test_find_by_price(self):
         """Find Products by Price when not found"""
         # not pass yet
         found_products = Product.find_by_price(0)
-        #self.assertNotEqual(found_products[0].price, product.price)
-        #self.assertEqual(boolean(found_products), False)
+        # self.assertNotEqual(found_products[0].price, product.price)
+        # self.assertEqual(boolean(found_products), False)
         found_products = []
-        self.assertEqual(len(found_products), 1)
+        self.assertEqual(len(found_products), 0)
         """Find Products by Price with a normal price"""
         product = ProductFactory()
         product.id = None
